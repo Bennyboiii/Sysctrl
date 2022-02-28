@@ -8,22 +8,22 @@ pub fn run(service: String) {
     for file in std::fs::read_dir(outpath).unwrap(){
         let filepath = file.unwrap().path();
         let path = filepath.to_string_lossy();
-        println!("{} to {}", path, servicepath);
         copy_file(path.to_string(), servicepath.to_string());
     }
 }
 
 pub fn stop(service: String) {
-    let path = parser(service.clone(), false);
+    let servicepath = parser(service.clone(), false);
     let inputpath = parser("input".to_string(), true);
-    let fullpath = format!("{}/{}/",inputpath ,service);
-    println!("deleting contents of {} in {}",fullpath, path);
-    for file in std::fs::read_dir(fullpath).unwrap(){
+    let outpath = format!("{}/{}/",inputpath ,service);
+    println!("deleting contents of {} in {}",outpath, servicepath);
+    for file in std::fs::read_dir(outpath).unwrap(){
         let filepath = file.unwrap().path();
         let destpath = filepath.to_string_lossy();
-        delete_file(destpath.to_string(), path.to_string())
+        delete_file(destpath.to_string(), servicepath.to_string())
     }
 }
+
 
 pub fn parser(service: String, permission: bool) -> String {
     let contents = std::fs::read_to_string("assoc.db").unwrap();
