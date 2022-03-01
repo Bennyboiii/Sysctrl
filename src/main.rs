@@ -40,6 +40,8 @@ fn main() {
         println!("I would then install each CUDA version into their respective service folders by using the mv command, or doing it manually.");
         println!("Then, I can simply start different CUDA versions by typing 'sysctl stop CUDA10.2', 'systemctl start CUDA11.5'.");
         println!("This makes it easier for developers to use multiple versions of drivers or libraries if needed. This avoids dependency hell.");
+    } else if command == "list" {
+        start::list();
     }
     else {
         panic!("Invalid Command");
