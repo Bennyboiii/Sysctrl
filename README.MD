@@ -9,28 +9,28 @@ as listing them out.
 The first thing you will need to do in SYSCTRL is create a directory where all your service files will go. This can
 be done with mkdir. You can then use this command: <br/><br/>
 
-- sysctrl path <path-you-created> <br/> <br/>
+- sysctrl path path-you-created <br/> <br/>
 
 SYSCTRL will now use this path to store service files. <br/>
 To add a service first do: <br/> <br/>
 
-- sysctrl create <service-name> <path-to-system-folder> <br/> <br/>
+- sysctrl create service-name path-to-system-folder <br/> <br/>
 
-The <path-to-system-folder> references the path the service files are usually installed in. <br/>
+Path-to-system-folder references the path the service files are usually installed in. <br/>
 Next, go to the folder you created with mkdir. You will notice another folder has been created inside the one you made.
 Drop the files in that folder. <br/> <br/>
 
 You can then move the files you put into that folder into the system folder using: <br/> <br/>
 
-- sysctrl start <service-name> <br/> <br/>
+- sysctrl start service-name <br/> <br/>
 
 And move them back using: <br/> <br/>
 
-- sysctrl stop <service-name> <br/> <br/>
+- sysctrl stop service-name <br/> <br/>
 
 If you want to delete a service, use: <br/> <br/>
 
-- sysctrl delete <service-name> <br/> <br/>
+- sysctrl delete service-name <br/> <br/>
 
 This will not delete the service files in the storage. <br/>
 Lastly, if you want to list all your services, do: <br/> <br/>
