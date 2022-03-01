@@ -1,4 +1,7 @@
 use std::collections::HashMap;
+use std::fs;
+use std::path::Path;
+use std::io;
 mod start;
 
 fn main() {
@@ -42,6 +45,9 @@ fn main() {
         println!("This makes it easier for developers to use multiple versions of drivers or libraries if needed. This avoids dependency hell.");
     } else if command == "list" {
         start::list();
+    // } else if command == "rule" {
+    //     let service = arguments.next().expect("service was not passed");
+    //     start::ruleparser(service);
     }
     else {
         panic!("Invalid Command");
@@ -54,9 +60,9 @@ struct Database {
 }
 
 impl Database {
-    fn new() -> Result<Database, std::io::Error> {
+    fn new() -> Result<Database, io::Error> {
         let mut map = HashMap::new();
-        let contents = std::fs::read_to_string("assoc.db")?;
+        let contents = fs::read_to_string("assoc.db")?;
         for line in contents.lines() {
             let (service, path) = line.split_once('\t').expect("Corrupt database");
             map.insert(service.to_owned(), path.to_owned());
@@ -74,7 +80,7 @@ impl Database {
 
     }
 
-    fn flush(mut self) -> std::io::Result<()> {
+    fn flush(mut self) -> io::Result<()> {
         self.flush = true;
         do_flush(&self)
     }
@@ -88,7 +94,7 @@ impl Drop for Database {
     }
 }
 
-fn do_flush(database: &Database) -> std::io::Result<()> {
+fn do_flush(database: &Database) -> io::Result<()> {
     let mut contents = String::new();
         for (service, path) in &database.map {
             contents.push_str(service);
@@ -96,27 +102,27 @@ fn do_flush(database: &Database) -> std::io::Result<()> {
             contents.push_str(path);
             contents.push('\n');
         }   
-        std::fs::write("assoc.db", contents)
+        fs::write("assoc.db", contents)
  
 }
 
 fn create_db_entry(service: String, path: String) {
     let mut database = Database::new().expect("Creating db crashed");
-    let pathexists = std::path::Path::new(&path).exists();
+    let pathexists = Path::new(&path).exists();
     if pathexists {
         database.insert(service.to_uppercase(), path.clone());
         database.insert(service.clone(), path);
         database.flush().unwrap();
-        let inputpath = start::parser("input".to_string(), true);
+        let inputpath = start::parser("input".to_string(), true, false);
         let fullpath = format!("{}/{}/",inputpath ,service);
-        std::fs::create_dir(fullpath).expect("Couldn't create directory");
+        fs::create_dir(fullpath).expect("Couldn't create directory");
     } else {
         panic!("Path does not exist.")
     }
 }
 fn create_input(path: String) {
     let mut database = Database::new().expect("Creating db crashed");
-    let pathexists = std::path::Path::new(&path).exists();
+    let pathexists = Path::new(&path).exists();
     if pathexists {
         database.insert("input".to_string(), path);
         database.flush().unwrap(); 
